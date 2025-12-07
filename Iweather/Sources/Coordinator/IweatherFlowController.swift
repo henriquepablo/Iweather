@@ -27,7 +27,8 @@ class IweatherFlowController {
 extension IweatherFlowController: SplashFlowDelegate {
     
     func navigateToHome() {
-        
+        let homeView = HomeViewController(contentView: HomeView())
+        self.navigationController?.pushViewController(homeView, animated: true)
     }
     
 }

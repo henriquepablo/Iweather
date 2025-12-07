@@ -11,7 +11,7 @@ import UIKit
 class SplashViewController: UIViewController {
     
     let contentView: SplashView
-    let flowDelegate: SplashFlowDelegate
+    weak var flowDelegate: SplashFlowDelegate?
     
     init(contentView: SplashView, flowDelegate: SplashFlowDelegate) {
         self.contentView = contentView
@@ -27,6 +27,7 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         setup()
         startBreathingAnimation()
+        decideFlow()
     }
     
     private func setup() {
@@ -44,6 +45,12 @@ class SplashViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func decideFlow() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) { [ weak self ] in
+            self?.flowDelegate?.navigateToHome()
+        }
     }
 }
 
