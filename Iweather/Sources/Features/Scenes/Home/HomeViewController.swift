@@ -11,6 +11,7 @@ import UIKit
 class HomeViewController: UIViewController {
     
     let contentView: HomeView
+    private let cityListDataSource: [String] = ["Sao Paulo"]
     
     init(contentView: HomeView) {
         self.contentView = contentView
@@ -36,6 +37,7 @@ class HomeViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
 
         setupConstraints()
+        setupTableView()
     }
     
     private func setupConstraints() {
@@ -46,4 +48,42 @@ class HomeViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    private func setupTableView() {
+        contentView.tableView.dataSource = self
+        contentView.tableView.delegate = self
+        contentView.tableView.register(ListCell.self, forCellReuseIdentifier: ListCell.identifier)
+        contentView.tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        
+    }
+
+}
+
+extension HomeViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 100
+    }
+    
+}
+
+extension HomeViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cityListDataSource.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ListCell.identifier, for: indexPath) as! ListCell
+        let city = cityListDataSource[indexPath.row]
+        cell.configure(title: city)
+        return cell
+    }
+    
+    
 }

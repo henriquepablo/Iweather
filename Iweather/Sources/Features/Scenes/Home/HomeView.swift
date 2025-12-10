@@ -71,6 +71,14 @@ class HomeView: UIView {
         return input
     }()
     
+    let tableView: UITableView = {
+        let table = UITableView()
+        table.backgroundColor = Colors.gray900
+        table.separatorStyle = .none
+        table.translatesAutoresizingMaskIntoConstraints = false
+        return table
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -86,6 +94,7 @@ class HomeView: UIView {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(input)
+        addSubview(tableView)
         setupConstraints()
     }
     
@@ -99,7 +108,7 @@ class HomeView: UIView {
             logoImage.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 48),
             logoImage.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            titleLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 192),
+            titleLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 162),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
             
@@ -109,7 +118,12 @@ class HomeView: UIView {
             input.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 32),
             input.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
             input.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
-            input.heightAnchor.constraint(equalToConstant: 56)
+            input.heightAnchor.constraint(equalToConstant: 56),
+            
+            tableView.topAnchor.constraint(equalTo: input.bottomAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
