@@ -25,10 +25,16 @@ class IweatherFlowController {
 }
 
 extension IweatherFlowController: SplashFlowDelegate {
-    
     func navigateToHome() {
-        let homeView = HomeViewController(contentView: HomeView())
+        let homeView = HomeViewController(contentView: HomeView(), flowDelegate: self)
         self.navigationController?.pushViewController(homeView, animated: true)
     }
     
+}
+
+extension IweatherFlowController: HomeFlowDelegate {
+    func navigateToWeatherDetails(nameCitty: String, lat: Double, lon: Double) {
+        let details = WeatherDetailsViewController(contentView: WeatherDetailsView(), cityName: nameCitty, lat: lat, lon: lon)
+        self.navigationController?.pushViewController(details, animated: true)
+    }
 }

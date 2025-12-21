@@ -11,10 +11,13 @@ import UIKit
 class HomeViewController: UIViewController {
     
     let contentView: HomeView
-    private let cityListDataSource: [String] = ["Sao Paulo"]
+    let flowDelegate: HomeFlowDelegate
+    private var viewModel = HomeViewModel()
+    private var cityListDataSource: [Citys] = []
     
-    init(contentView: HomeView) {
+    init(contentView: HomeView, flowDelegate: HomeFlowDelegate) {
         self.contentView = contentView
+        self.flowDelegate = flowDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,6 +41,7 @@ class HomeViewController: UIViewController {
 
         setupConstraints()
         setupTableView()
+        contentView.input.addTarget(self, action: #selector(handleTextFieldInput), for: .editingChanged)
     }
     
     private func setupConstraints() {
@@ -56,7 +60,19 @@ class HomeViewController: UIViewController {
         contentView.tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         
     }
-
+    
+    @objc
+    func handleTextFieldInput() {
+        
+        guard let text = contentView.input.text else {return}
+        
+        viewModel.searchCity(title: text) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.cityListDataSource = result
+                self?.contentView.tableView.reloadData()
+            }
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDelegate {
@@ -69,6 +85,12 @@ extension HomeViewController: UITableViewDelegate {
         return 100
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        let city = cityListDataSource[indexPath.row]
+        flowDelegate.navigateToWeatherDetails(nameCitty: "\(city.name) - \(city.sys.country)", lat: city.coord.lat, lon: city.coord.lon)
+    }
 }
 
 extension HomeViewController: UITableViewDataSource {
@@ -81,7 +103,7 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListCell.identifier, for: indexPath) as! ListCell
         let city = cityListDataSource[indexPath.row]
-        cell.configure(title: city)
+        cell.configure(title: "\(city.name) - \(city.sys.country)")
         return cell
     }
     

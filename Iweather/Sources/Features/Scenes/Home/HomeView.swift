@@ -55,7 +55,7 @@ class HomeView: UIView {
         return label
     }()
     
-    private let input: UITextField = {
+    let input: UITextField = {
         let input = UITextField()
         let redPlaceholderText = NSAttributedString(string: "Buscar local",
                                                     attributes: [NSAttributedString.Key.foregroundColor: Colors.gray400])
